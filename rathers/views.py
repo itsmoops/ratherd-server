@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from django.shortcuts import render
+from django.db.models import Sum
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rathers.serializers import RatherSerializer
@@ -19,8 +20,11 @@ class RatherViewSet(viewsets.ModelViewSet):
 		serialized  = self.serializer_class(rathers, context={'request': request}, many=True)
 		return Response(serialized.data, 200)
 
+	@list_route()
 	def ranked(self, request):
-		top = Rather.objects.order_by('ratio')
+		count = Rather.objects.count()
+		print(count * .10)
+		top = Rather.objects.order_by('id').extra(where=["wins + losses > 10"])
 		serialized = self.serializer_class(top, context={'request': request}, many=True)
 		return Response(serialized.data, 200)
 

@@ -10,6 +10,7 @@ class Rather(models.Model):
 	paired_id = models.IntegerField(default=0)
 	date_submitted = models.DateTimeField(auto_now_add=True)
 	date_updated = models.DateTimeField(auto_now_add=True)
+	flagged = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.rather_text
