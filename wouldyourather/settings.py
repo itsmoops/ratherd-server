@@ -130,7 +130,7 @@ USE_TZ = True
 
 STATIC_URL = 'http://api.wouldyourather.us/static/'
 STATICFILES_DIRS = (  
-    os.path.join(BASE_DIR, 'globals', 'static')
+    os.path.join(BASE_DIR, 'globals', 'static'),
 )
 STATIC_ROOT = 'home/itsmoops/webapps/wouldyourather_static'
 
