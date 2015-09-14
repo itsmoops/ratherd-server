@@ -103,10 +103,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'wouldyourather_db',
-        'USER': 'admin',
-        'PASSWORD': 'local',
-        'HOST': 'localhost',
-        'PORT': '',
+        'USER': 'wyradmin',
+        'PASSWORD': 'Esso11vicenza87',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
@@ -128,4 +128,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'http://api.wouldyourather.us/static/'
+STATICFILES_DIRS = (  
+    os.path.join(BASE_DIR, 'globals', 'static')
+)
+STATIC_ROOT = 'home/itsmoops/webapps/wouldyourather_static'
+
+try:
+    from local_settings import *
+except ImportError:
+    pass

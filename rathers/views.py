@@ -23,7 +23,6 @@ class RatherViewSet(viewsets.ModelViewSet):
 	@list_route()
 	def ranked(self, request):
 		count = Rather.objects.count()
-		print(count * .10)
 		top = Rather.objects.order_by('id').extra(where=["wins + losses > 10"])
 		serialized = self.serializer_class(top, context={'request': request}, many=True)
 		return Response(serialized.data, 200)

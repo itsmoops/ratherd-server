@@ -20,6 +20,5 @@ class Rather(models.Model):
 			self.ratio = round(float(self.wins) / (float(self.wins) + float(self.losses)), 10)
 		else:
 			self.ratio = 0.5
-		print(self.ratio)
 		super(Rather, self).save(*args, **kwargs)
 	
