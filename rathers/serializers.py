@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
-from models import Rather
+from .models import Rather
 import math
 
 class RatherSerializer(serializers.ModelSerializer):

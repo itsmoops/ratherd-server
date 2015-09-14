@@ -30,7 +30,7 @@ class RatherViewSet(viewsets.ModelViewSet):
 	@detail_route(methods=['POST'])
 	def vote(self, request, pk):
 		rather = self.get_object()
-		win = request.QUERY_PARAMS['win']
+		win = request.query_params['win']
 		if win == 'true':
 			rather.wins += 1
 		else:
