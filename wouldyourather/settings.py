@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = (
     'api.wouldyourather.us',
+    'www.api.wouldyourather.us'
 )
 
 
