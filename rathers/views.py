@@ -16,8 +16,6 @@ class RatherViewSet(viewsets.ModelViewSet):
 	def comparison(self, request):
 		rather1Url = request.query_params.get('rather1', None)
 		rather2Url = request.query_params.get('rather2', None)
-
-		print rather1Url
 		if rather1Url and rather2Url:
 			rather1 = self.queryset.get(id=rather1Url)
 			rather2 = self.queryset.get(id=rather2Url)
