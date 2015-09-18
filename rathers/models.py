@@ -1,4 +1,6 @@
 from django.db import models
+import pytz
+from datetime import datetime
 
 # Create your models here.
 class Rather(models.Model):
@@ -18,6 +20,7 @@ class Rather(models.Model):
 	def save(self, *args, **kwargs):
 		if self.wins > 0 or self.losses > 0:
 			self.ratio = round(float(self.wins) / (float(self.wins) + float(self.losses)), 10)
+			self.date_updated = datetime.now(pytz.utc)
 		else:
 			self.ratio = 0.5
 		super(Rather, self).save(*args, **kwargs)

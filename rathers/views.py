@@ -14,8 +14,17 @@ class RatherViewSet(viewsets.ModelViewSet):
 
 	@list_route()
 	def comparison(self, request):
-		rather1 = Rather.objects.order_by('?')[0]
-		rather2 = Rather.objects.filter(ratio__lte=rather1.ratio).order_by('-ratio').exclude(id=rather1.id)[0]
+		rather1Url = request.query_params.get('rather1', None)
+		rather2Url = request.query_params.get('rather2', None)
+
+		print rather1Url
+		if rather1Url and rather2Url:
+			rather1 = self.queryset.get(id=rather1Url)
+			rather2 = self.queryset.get(id=rather2Url)
+		else:
+			rather1 = Rather.objects.order_by('?')[0]
+			rather2 = Rather.objects.filter(ratio__lte=rather1.ratio).order_by('-ratio').exclude(id=rather1.id)[0]
+		
 		rathers = Rather.objects.filter(id__in=[rather2.id,rather1.id])
 		serialized  = self.serializer_class(rathers, context={'request': request}, many=True)
 		return Response(serialized.data, 200)
