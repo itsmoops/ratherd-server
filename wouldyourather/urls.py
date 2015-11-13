@@ -16,14 +16,20 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
+from rest_framework.authtoken.views import ObtainAuthToken
 
 import rathers.views
+import account.views
+
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api-token-auth/', account.views.ObtainAuthToken.as_view()),
+    url(r'^login/$', 'django.contrib.auth.views.login')
 ]
 
 router = DefaultRouter()
+router.register(r'users', account.views.UserViewSet, 'Users')
 router.register(r'rathers', rathers.views.RatherViewSet)
 urlpatterns += router.urls

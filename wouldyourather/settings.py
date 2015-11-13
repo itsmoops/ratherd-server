@@ -22,8 +22,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'nz8!$2a!k3u_ylb4^$(b&_mj=_tyz&kh#(2)hx8-$2)z89!)&4'
 
+# URL of the login page.
+LOGIN_URL = '#/login'
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = (
     'api.wouldyourather.us',
@@ -40,8 +43,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rathers',
+    'account',
+
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders'
 )
 
@@ -70,6 +77,18 @@ CORS_ALLOW_HEADERS = (
     'x-csrftoken',
     '__setXHR_'
 )
+
+REST_FRAMEWORK = {
+    # Use hyperlinked styles by default.
+    # Only used if the `serializer_class` attribute is not set on a view.
+    'DEFAULT_MODEL_SERIALIZER_CLASS':
+        'rest_framework.serializers.ModelSerializer',
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',  # optional
+    )
+}
 
 TEMPLATES = [
     {

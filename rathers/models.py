@@ -1,9 +1,11 @@
 from django.db import models
 import pytz
 from datetime import datetime
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Rather(models.Model):
+	user = models.ForeignKey(User)
 	rather_text = models.CharField(max_length=1000)
 	wins = models.IntegerField(default=0)
 	losses = models.IntegerField(default=0)
