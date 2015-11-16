@@ -5,12 +5,17 @@ from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rathers.serializers import RatherSerializer
 from rathers.models import Rather
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 import random
 
 # Create your views here.
 class RatherViewSet(viewsets.ModelViewSet):
 	queryset = Rather.objects.all()
+	permission_classes = [IsAuthenticatedOrReadOnly]
 	serializer_class = RatherSerializer
+
+	def perform_create(self, serializer):
+		serializer.save(user=self.request.user)
 
 	@list_route()
 	def comparison(self, request):

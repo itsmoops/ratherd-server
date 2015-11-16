@@ -33,7 +33,6 @@ class ObtainAuthToken(APIView):
     parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
     renderer_classes = (renderers.JSONRenderer,)
     serializer_class = AuthTokenSerializer
-    print 'server'
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)

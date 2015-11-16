@@ -1,6 +1,7 @@
-from django.contrib.auth.models import User
 from rest_framework import serializers
-
+from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,6 +12,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         password = validated_data.get('password', User.objects.make_random_password())
+        if not validated_data.get('email'):
+            raise serializers.ValidationError('Invalid email.')
         user = User.objects.create(
             email=validated_data['email'],
             username=validated_data['username'],
