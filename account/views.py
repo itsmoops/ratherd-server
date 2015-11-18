@@ -16,15 +16,10 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    @list_route()
+    @list_route(permission_classes=[permissions.IsAuthenticated])
     def current(self, request):
-        userid = request.query_params.get('u', None)
-        if userid:
-            queryset = User.objects.filter(id=userid)
-        else:
-            queryset = User.objects.filter(id=1)
-        print userid
-        serializer = UserSerializer(queryset, many=True)
+        user = request.user.is_authenticated();
+        serializer = UserSerializer(user)
         return Response(serializer.data)
 
 class ObtainAuthToken(APIView):
