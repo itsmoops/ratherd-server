@@ -10,6 +10,7 @@ class RatherSerializer(serializers.ModelSerializer):
 		model = Rather
 		fields = [
 			'id',
+			'user',
 			'rather_text',
 			'wins',
 			'losses',
