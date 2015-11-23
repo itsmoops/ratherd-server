@@ -29,6 +29,8 @@ LOGIN_URL = '#/login'
 DEBUG = False
 
 ALLOWED_HOSTS = (
+    'wouldyourather.us',
+    'www.wouldyourather.us',
     'api.wouldyourather.us',
     'www.api.wouldyourather.us'
 )
