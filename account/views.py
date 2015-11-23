@@ -10,7 +10,7 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.views import APIView
 from rest_framework.authtoken.views import ObtainAuthToken
 from django.core.exceptions import ValidationError
-import serializers
+from django.core import serializers
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -34,7 +34,6 @@ class ObtainAuthToken(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        print UserSerializer(user)
         return Response({'token': token.key, 'user': UserSerializer(user).data})
 
 
