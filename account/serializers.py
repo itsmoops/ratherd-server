@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         password = validated_data.get('password', User.objects.make_random_password())
         if not validated_data.get('email'):
-            raise serializers.ValidationError('Invalid email.')
+            raise serializers.ValidationError('Invalid email')
         user = User.objects.create(
             email=validated_data['email'],
             username=validated_data['username'],

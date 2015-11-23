@@ -18,8 +18,8 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @list_route(permission_classes=[permissions.IsAuthenticated])
     def current(self, request):
-        user = request.user.is_authenticated();
-        serializer = UserSerializer(user)
+        if request.user.is_authenticated():
+            serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
 class ObtainAuthToken(APIView):

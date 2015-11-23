@@ -39,6 +39,12 @@ class RatherViewSet(viewsets.ModelViewSet):
 		serialized = self.serializer_class(top, context={'request': request}, many=True)
 		return Response(serialized.data, 200)
 
+	@list_route()
+	def user_rathers(self, request):
+		user_rathers = Rather.objects.filter(user_id=request.user.id)
+		serialized  = self.serializer_class(user_rathers, context={'request': request}, many=True)
+		return Response(serialized.data, 200)
+
 	@detail_route(methods=['POST'])
 	def vote(self, request, pk):
 		rather = self.get_object()
