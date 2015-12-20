@@ -10,11 +10,9 @@ class Rather(models.Model):
 	wins = models.IntegerField(default=0)
 	losses = models.IntegerField(default=0)
 	ratio = models.DecimalField(default=0.5, max_digits=20, decimal_places=10)
-	is_pair = models.BooleanField(default=False)
-	paired_id = models.IntegerField(default=0)
+	this_sucks = models.IntegerField(default=0)
 	date_submitted = models.DateTimeField(auto_now_add=True)
 	date_updated = models.DateTimeField(auto_now_add=True)
-	flagged = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.rather_text
@@ -26,4 +24,3 @@ class Rather(models.Model):
 		else:
 			self.ratio = 0.5
 		super(Rather, self).save(*args, **kwargs)
-	

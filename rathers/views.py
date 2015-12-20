@@ -27,7 +27,7 @@ class RatherViewSet(viewsets.ModelViewSet):
 		else:
 			rather1 = Rather.objects.order_by('?')[0]
 			rather2 = Rather.objects.filter(ratio__lte=rather1.ratio).order_by('-ratio').exclude(id=rather1.id)[0]
-		
+
 		rathers = Rather.objects.filter(id__in=[rather2.id,rather1.id])
 		serialized  = self.serializer_class(rathers, context={'request': request}, many=True)
 		return Response(serialized.data, 200)
@@ -54,5 +54,13 @@ class RatherViewSet(viewsets.ModelViewSet):
 		else:
 			rather.losses += 1
 		rather.save()
-		serialized  = self.serializer_class(rather, context={'request': request})
+		serialized = self.serializer_class(rather, context={'request': request})
+		return Response(serialized.data, 200)
+
+	@detail_route(methods=['POST'])
+	def sucks(self, request, pk):
+		rather = self.get_object()
+		rather.this_sucks += 1
+		rather.save()
+		serialized = self.serializer_class(rather, context={'request': request})
 		return Response(serialized.data, 200)

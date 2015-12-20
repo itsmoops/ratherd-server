@@ -15,6 +15,7 @@ class RatherSerializer(serializers.ModelSerializer):
 			'wins',
 			'losses',
 			'ratio',
+			'this_sucks',
 			'date_submitted',
 			'date_updated'
 		]
