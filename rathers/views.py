@@ -4,7 +4,10 @@ from django.db.models import Sum
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rathers.serializers import RatherSerializer
+from account.serializers import UserSerializer
+from account.views import UserViewSet
 from rathers.models import Rather
+from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 import random
 
@@ -15,6 +18,7 @@ class RatherViewSet(viewsets.ModelViewSet):
 	serializer_class = RatherSerializer
 
 	def perform_create(self, serializer):
+		print self.request.user
 		serializer.save(user=self.request.user)
 
 	@list_route()
@@ -28,8 +32,26 @@ class RatherViewSet(viewsets.ModelViewSet):
 			rather1 = Rather.objects.order_by('?')[0]
 			rather2 = Rather.objects.filter(ratio__lte=rather1.ratio).order_by('-ratio').exclude(id=rather1.id)[0]
 
-		rathers = Rather.objects.filter(id__in=[rather2.id,rather1.id])
-		serialized  = self.serializer_class(rathers, context={'request': request}, many=True)
+		rathers = Rather.objects.filter(id__in=[rather1.id,rather2.id])
+		serialized = self.serializer_class(rathers, context={'request': request}, many=True)
+		# users = [User.objects.get(id=rather1.id).username, User.objects.get(id=rather2.id).username]
+		# print users
+		# serialized_users = UserSerializer(users, many=True)
+
+		# serialized.data.insert(0, serialized_users)
+		# for item in serialized.data.items()
+		# 	print 'hi'
+
+		# serialized.data.__setitem__(8, "username")
+
+		# print serialized_users.data
+
+		data = [
+			serialized.data
+		]
+
+		# data[0].append(serialized_users.data[0].username)
+		# data.append(serialized_users.data)
 		return Response(serialized.data, 200)
 
 	@list_route()
