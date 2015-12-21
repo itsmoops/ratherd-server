@@ -18,7 +18,6 @@ class RatherViewSet(viewsets.ModelViewSet):
 	serializer_class = RatherSerializer
 
 	def perform_create(self, serializer):
-		print self.request.user
 		serializer.save(user=self.request.user)
 
 	@list_route()
@@ -33,7 +32,6 @@ class RatherViewSet(viewsets.ModelViewSet):
 			rather2 = Rather.objects.filter(ratio__lte=rather1.ratio).order_by('-ratio').exclude(id=rather1.id)[0]
 
 		rathers = Rather.objects.filter(id__in=[rather1.id,rather2.id])
-		print rathers
 		serialized = self.serializer_class(rathers, context={'request': request}, many=True)
 		return Response(serialized.data, 200)
 

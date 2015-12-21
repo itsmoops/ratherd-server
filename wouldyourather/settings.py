@@ -26,7 +26,7 @@ SECRET_KEY = 'nz8!$2a!k3u_ylb4^$(b&_mj=_tyz&kh#(2)hx8-$2)z89!)&4'
 LOGIN_URL = '#/login'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = (
     'wouldyourather.us',
@@ -151,7 +151,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = 'http://api.wouldyourather.us/static/'
-# STATICFILES_DIRS = (  
+# STATICFILES_DIRS = (
 #     os.path.join(BASE_DIR, 'globals', 'static'),
 # )
 STATIC_ROOT = '/home/itsmoops/webapps/wouldyourather_static'
