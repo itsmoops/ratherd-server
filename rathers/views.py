@@ -1,15 +1,9 @@
 from rest_framework import viewsets
-from django.shortcuts import render
-from django.db.models import Sum
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rathers.serializers import RatherSerializer
-from account.serializers import UserSerializer
-from account.views import UserViewSet
 from rathers.models import Rather
-from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-import random
 
 # Create your views here.
 class RatherViewSet(viewsets.ModelViewSet):
@@ -28,8 +22,8 @@ class RatherViewSet(viewsets.ModelViewSet):
 			rather1 = self.queryset.get(id=rather1Url)
 			rather2 = self.queryset.get(id=rather2Url)
 		else:
-			rather1 = Rather.objects.order_by('?')[0]
-			rather2 = Rather.objects.filter(ratio__lte=rather1.ratio).order_by('-ratio').exclude(id=rather1.id)[0]
+			rather1 = Rather.objects.filter(active=True).order_by('?')[0]
+			rather2 = Rather.objects.filter(active=True,ratio__lte=rather1.ratio).order_by('-ratio').exclude(id=rather1.id)[0]
 
 		rathers = Rather.objects.filter(id__in=[rather1.id,rather2.id])
 		serialized = self.serializer_class(rathers, context={'request': request}, many=True)
@@ -64,6 +58,8 @@ class RatherViewSet(viewsets.ModelViewSet):
 	def sucks(self, request, pk):
 		rather = self.get_object()
 		rather.this_sucks += 1
+		# if rather.this_sucks > 10:
+		# 	rather.active = False
 		rather.save()
 		serialized = self.serializer_class(rather, context={'request': request})
 		return Response(serialized.data, 200)

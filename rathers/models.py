@@ -13,6 +13,7 @@ class Rather(models.Model):
 	this_sucks = models.IntegerField(default=0)
 	date_submitted = models.DateTimeField(auto_now_add=True)
 	date_updated = models.DateTimeField(auto_now_add=True)
+	active = models.BooleanField(default=1)
 
 	def __str__(self):
 		return self.rather_text
@@ -24,3 +25,7 @@ class Rather(models.Model):
 		else:
 			self.ratio = 0.5
 		super(Rather, self).save(*args, **kwargs)
+
+class Sucks(models.Model):
+	rather = models.ForeignKey(Rather)
+	user = models.ForeignKey(User)
