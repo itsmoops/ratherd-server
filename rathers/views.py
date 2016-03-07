@@ -3,7 +3,10 @@ from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rathers.serializers import RatherSerializer
 from rathers.models import Rather
+from rathers.models import Sucks
+from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from itertools import chain
 
 # Create your views here.
 class RatherViewSet(viewsets.ModelViewSet):
@@ -26,8 +29,17 @@ class RatherViewSet(viewsets.ModelViewSet):
 			rather2 = Rather.objects.filter(active=True,ratio__lte=rather1.ratio).order_by('-ratio').exclude(id=rather1.id)[0]
 
 		rathers = Rather.objects.filter(id__in=[rather1.id,rather2.id])
+
+		user_sucks_1 = Sucks.objects.filter(rather_id=rather1.id, user_id=request.user.id).count()
+		user_sucks_2 = Sucks.objects.filter(rather_id=rather2.id, user_id=request.user.id).count()
+
+		user_sucks = {
+			"rather1": user_sucks_1,
+			"rather2": user_sucks_2
+		}
+		
 		serialized = self.serializer_class(rathers, context={'request': request}, many=True)
-		return Response(serialized.data, 200)
+		return Response({ "rathers": serialized.data, "user_sucks": user_sucks }, 200)
 
 	@list_route()
 	def ranked(self, request):
@@ -57,9 +69,24 @@ class RatherViewSet(viewsets.ModelViewSet):
 	@detail_route(methods=['POST'])
 	def sucks(self, request, pk):
 		rather = self.get_object()
-		rather.this_sucks += 1
-		# if rather.this_sucks > 10:
-		# 	rather.active = False
+
+		sucks_current_user = Sucks.objects.filter(rather_id=rather.id, user_id=request.user.id).count()
+		if sucks_current_user > 0:
+			rather.this_sucks -= 1
+			Sucks.objects.filter(rather_id=rather.id, user_id=request.user.id).delete()
+		else:
+			rather.this_sucks += 1
+			sucks = Sucks()
+			sucks.rather_id = rather.id
+			sucks.user_id = request.user.id
+			sucks.save()
+
+		sucks_per_rather = Sucks.objects.filter(rather_id=rather.id).count()
+		if rather.this_sucks > 50 and rather.ratio < .25:
+			rather.active = False
+		else:
+			rather.active = True
 		rather.save()
+
 		serialized = self.serializer_class(rather, context={'request': request})
 		return Response(serialized.data, 200)
