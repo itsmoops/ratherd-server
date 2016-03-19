@@ -27,10 +27,11 @@ class UserViewSet(viewsets.ModelViewSet):
     def send_email(self, request):
         current = User.objects.get(username=request.data["username"])
 
-        body = "Hey " + current.username + " go fuck yourself."
+        body = "Hey " + current.username + ", we got a request to reset your Would You Rather password. Here ya go, idiot!"
+        link = "www.wouldyourather.us/resetpw"
         email = current.email
 
-        send_mail('WYR - Reset Password', body, 'info@wouldyourather.us', [email], fail_silently=False)
+        send_mail('Would You Rather - Password Reset', body, 'info@wouldyourather.us', [email], link, fail_silently=False)
         # serializer = UserSerializer(current)
         return Response(email, 200)
 
