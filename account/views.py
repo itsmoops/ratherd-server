@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.authtoken.views import ObtainAuthToken
 from django.core.exceptions import ValidationError
 from django.core import serializers
+from django.core.mail import send_mail
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -21,6 +22,14 @@ class UserViewSet(viewsets.ModelViewSet):
         if request.user.is_authenticated():
             serializer = UserSerializer(request.user)
         return Response(serializer.data)
+
+    @list_route(methods=['POST'])
+    def send_email(self, request):
+        current = User.objects.get(username=request.data["username"])
+        email = current.email
+        send_mail('WYR - Reset Password', 'Here is the message.', 'reset@wouldyourather.us', [email], fail_silently=False)
+        # serializer = UserSerializer(current)
+        return Response(email, 200)
 
 class ObtainAuthToken(APIView):
     throttle_classes = ()
@@ -35,6 +44,5 @@ class ObtainAuthToken(APIView):
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key, 'user': UserSerializer(user).data})
-
 
     obtain_auth_token = ObtainAuthToken.as_view()
