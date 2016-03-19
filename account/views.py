@@ -27,8 +27,8 @@ class UserViewSet(viewsets.ModelViewSet):
     def send_email(self, request):
         current = User.objects.get(username=request.data["username"])
 
-        link = "www.wouldyourather.us/resetpw"
-        body = "Hey " + current.username + ", we got a request to reset your Would You Rather password. Here ya go, idiot! " + link
+        link = "www.wouldyourather.us/#/resetpw"
+        body = "Hey " + current.username + ", we got a request to reset your Would You Rather password. Here ya go, idiot!\n" + link
 
         email = current.email
 
