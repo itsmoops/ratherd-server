@@ -108,7 +108,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'wouldyourather.wsgi.application'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.webfaction.com'
+EMAIL_HOST_USER = 'wouldyourather'
+EMAIL_HOST_PASSWORD = 'Esso11vicenza87'
+DEFAULT_FROM_EMAIL = 'info@wouldyourather.us'
+SERVER_EMAIL = 'info@wouldyourather.us'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
