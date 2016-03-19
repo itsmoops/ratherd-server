@@ -30,7 +30,7 @@ class UserViewSet(viewsets.ModelViewSet):
         body = "Hey " + current.username + " go fuck yourself."
         email = current.email
 
-        send_mail('WYR - Reset Password', [body], 'info@wouldyourather.us', [email], fail_silently=False)
+        send_mail('WYR - Reset Password', body, 'info@wouldyourather.us', [email], fail_silently=False)
         # serializer = UserSerializer(current)
         return Response(email, 200)
 
