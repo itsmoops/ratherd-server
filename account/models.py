@@ -20,4 +20,6 @@ def create_token_for_user(sender, **kwargs):
 		# Account.objects.create(user=user, name=user.username)
 		Token.objects.create(user=user)
 
-		
+class ResetCodes(models.Model):
+	user = models.ForeignKey(User)
+	code = models.IntegerField(default=1000)

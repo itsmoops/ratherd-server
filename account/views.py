@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import detail_route, list_route
 from django.shortcuts import get_object_or_404
 from account.serializers import UserSerializer
+from account.models import ResetCodes
 from rest_framework import viewsets, permissions, authentication, generics, parsers, renderers
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -12,6 +13,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from django.core.exceptions import ValidationError
 from django.core import serializers
 from django.core.mail import send_mail
+from random import randint
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -25,16 +27,47 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @list_route(methods=['POST'])
     def send_email(self, request):
-        current = User.objects.get(username=request.data["username"])
+        count = User.objects.filter(username=request.data["username"]).count()
 
-        link = "www.wouldyourather.us/#/resetpw?user=" + str(current.id)
-        body = "Hey " + current.username + ", we got a request to reset your Would You Rather password. Here ya go, idiot! \n \n" + link
+        if count > 0:
+            current = User.objects.get(username=request.data["username"])
 
-        email = current.email
+            codes_current_user = ResetCodes.objects.filter(user_id=current.id).count()
+            code = ResetCodes()
+            random_num = randint(1000, 9999)
+            if codes_current_user > 0:
+                ResetCodes.objects.filter(user_id=current.id).delete()
+                code.user_id = current.id
+                code.code = random_num
+                code.save()
+            else:
+                code.user_id = current.id
+                code.code = random_num
+                code.save()
 
-        send_mail('Would You Rather - Password Reset', body, 'info@wouldyourather.us', [email], fail_silently=False)
-        # serializer = UserSerializer(current)
-        return Response("An email with a reset link has been sent to " + email, 200)
+            link = "www.wouldyourather.us/#/verify?u=" + str(current.id)
+            body = "Hey " + current.username + ", we got a request to reset your Would You Rather password. Follow the link attached and use the reset code provided here \n \n" + str(random_num) + "\n \n" + link
+            email = current.email
+            send_mail('Would You Rather - Password Reset', body, 'info@wouldyourather.us', [email], fail_silently=False)
+
+            response = email
+        else:
+            response = False
+
+        return Response(response, 200)
+
+    @list_route(methods=["POST"])
+    def check_code(self, request):
+        user_val = request.data["user"]
+        code_val = request.data["code"]
+        count = ResetCodes.objects.filter(user_id=user_val, code=code_val).count()
+
+        if count > 0:
+            response = True
+        else:
+            response = False
+
+        return Response(response, 200)
 
 class ObtainAuthToken(APIView):
     throttle_classes = ()
