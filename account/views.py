@@ -28,7 +28,7 @@ class UserViewSet(viewsets.ModelViewSet):
         current = User.objects.get(username=request.data["username"])
 
         link = "www.wouldyourather.us/#/resetpw?user=" + str(current.id)
-        body = "Hey " + current.username + ", we got a request to reset your Would You Rather password. Here ya go, idiot! \n" + link
+        body = "Hey " + current.username + ", we got a request to reset your Would You Rather password. Here ya go, idiot! %0A %0A" + link
 
         email = current.email
 
