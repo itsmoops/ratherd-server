@@ -28,13 +28,13 @@ class UserViewSet(viewsets.ModelViewSet):
         current = User.objects.get(username=request.data["username"])
 
         link = "www.wouldyourather.us/#/resetpw?user=" + str(current.id)
-        body = "Hey " + current.username + ", we got a request to reset your Would You Rather password. Here ya go, idiot!\n" + link
+        body = "Hey " + current.username + ", we got a request to reset your Would You Rather password. Here ya go, idiot! " + link
 
         email = current.email
 
         send_mail('Would You Rather - Password Reset', body, 'info@wouldyourather.us', [email], fail_silently=False)
         # serializer = UserSerializer(current)
-        return Response(email, 200)
+        return Response("An email with a reset link has been sent to " + email, 200)
 
 class ObtainAuthToken(APIView):
     throttle_classes = ()
