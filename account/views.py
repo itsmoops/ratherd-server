@@ -73,8 +73,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @list_route(methods=["POST"])
     def update_password(self, request):
-        print request.data["username"]
-        print request.data["password"]
         user = User.objects.get(username__exact=request.data["username"])
         user.set_password(request.data["password"])
         user.save()
