@@ -63,9 +63,23 @@ class UserViewSet(viewsets.ModelViewSet):
         count = ResetCodes.objects.filter(user_id=user_val, code=code_val).count()
 
         if count > 0:
-            response = True
+            current = User.objects.get(id=request.data["user"])
+            ResetCodes.objects.filter(user_id=current.id).delete()
+            response = UserSerializer(current).data
         else:
             response = False
+
+        return Response(response, 200)
+
+    @list_route(methods=["POST"])
+    def update_password(self, request):
+        print request.data["username"]
+        print request.data["password"]
+        user = User.objects.get(username__exact=request.data["username"])
+        user.set_password(request.data["password"])
+        user.save()
+
+        response = UserSerializer(user).data
 
         return Response(response, 200)
 
