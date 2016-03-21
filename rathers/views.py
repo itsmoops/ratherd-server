@@ -6,6 +6,7 @@ from rathers.models import Rather
 from rathers.models import Sucks
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import AllowAny
 from itertools import chain
 
 # Create your views here.
@@ -54,7 +55,7 @@ class RatherViewSet(viewsets.ModelViewSet):
 		serialized  = self.serializer_class(user_rathers, context={'request': request}, many=True)
 		return Response(serialized.data, 200)
 
-	@detail_route(methods=['POST'])
+	@detail_route(methods=['POST'], permission_classes=[AllowAny])
 	def vote(self, request, pk):
 		rather = self.get_object()
 		win = request.query_params['win']
