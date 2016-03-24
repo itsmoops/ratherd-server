@@ -26,7 +26,7 @@ SECRET_KEY = 'nz8!$2a!k3u_ylb4^$(b&_mj=_tyz&kh#(2)hx8-$2)z89!)&4'
 LOGIN_URL = '#/login'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = (
     'wouldyourather.us',
