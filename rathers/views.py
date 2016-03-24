@@ -27,10 +27,14 @@ class RatherViewSet(viewsets.ModelViewSet):
 			rather1 = self.queryset.get(id=rather1Url)
 			rather2 = self.queryset.get(id=rather2Url)
 		else:
-			user_sucks_ids = Sucks.objects.values_list('rather_id', flat=True).order_by('rather_id')
+			if request.user.id is not None:
+				user_sucks_ids = Sucks.objects.values_list('rather_id', flat=True).order_by('rather_id')
+				rather1 = Rather.objects.filter(active=True).exclude(id__in=user_sucks_ids).order_by('?')[0]
+				rather2 = Rather.objects.filter(active=True,ratio__lte=rather1.ratio).order_by('-ratio').exclude(id__in=user_sucks_ids).exclude(id=rather1.id)[0]
+			else:
+				rather1 = Rather.objects.filter(active=True).order_by('?')[0]
+				rather2 = Rather.objects.filter(active=True,ratio__lte=rather1.ratio).order_by('-ratio').exclude(id=rather1.id)[0]
 
-			rather1 = Rather.objects.filter(active=True).exclude(id__in=user_sucks_ids).order_by('?')[0]
-			rather2 = Rather.objects.filter(active=True,ratio__lte=rather1.ratio).order_by('-ratio').exclude(id__in=user_sucks_ids).exclude(id=rather1.id)[0]
 
 		rathers = Rather.objects.filter(id__in=[rather1.id,rather2.id])
 
