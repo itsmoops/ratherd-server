@@ -20,6 +20,7 @@ class RatherViewSet(viewsets.ModelViewSet):
 
 	@list_route()
 	def comparison(self, request):
+		print 'webfaction works'
 		rather1Url = request.query_params.get('r1', None)
 		rather2Url = request.query_params.get('r2', None)
 
