@@ -20,7 +20,6 @@ class RatherViewSet(viewsets.ModelViewSet):
 
 	@list_route()
 	def comparison(self, request):
-		print("webfaction works")
 		rather1Url = request.query_params.get('r1', None)
 		rather2Url = request.query_params.get('r2', None)
 
@@ -53,7 +52,7 @@ class RatherViewSet(viewsets.ModelViewSet):
 	@list_route()
 	def ranked(self, request):
 		count = Rather.objects.count()
-		top = Rather.objects.order_by('id').extra(where=["wins + losses > 10"])
+		top = Rather.objects.order_by('ratio').extra(where=["wins + losses > 10"])
 		serialized = self.serializer_class(top, context={'request': request}, many=True)
 		return Response(serialized.data, 200)
 
