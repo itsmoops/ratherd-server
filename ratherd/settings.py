@@ -65,7 +65,7 @@ MIDDLEWARE_CLASSES = (
     'corsheaders.middleware.CorsMiddleware',
 )
 
-ROOT_URLCONF = 'wouldyourather.urls'
+ROOT_URLCONF = 'ratherd.urls'
 
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
@@ -107,13 +107,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'wouldyourather.wsgi.application'
+WSGI_APPLICATION = 'ratherd.wsgi.application'
 
 EMAIL_HOST = 'smtp.webfaction.com'
-EMAIL_HOST_USER = 'wouldyourather'
+EMAIL_HOST_USER = 'ratherd'
 EMAIL_HOST_PASSWORD = 'Esso11vicenza87'
-DEFAULT_FROM_EMAIL = 'info@wouldyourather.us'
-SERVER_EMAIL = 'info@wouldyourather.us'
+DEFAULT_FROM_EMAIL = 'info@ratherd.us'
+SERVER_EMAIL = 'info@ratherd.us'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
