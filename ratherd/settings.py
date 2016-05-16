@@ -130,7 +130,7 @@ SERVER_EMAIL = 'info@ratherd.us'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'wouldyourather_db',
+        'NAME': 'ratherd_db',
         'USER': 'wyradmin',
         'PASSWORD': 'Esso11vicenza87',
         'HOST': '127.0.0.1',
