@@ -30,7 +30,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = (
     'wouldyourather.us',
-    'www.wouldyourather.us'
+    'www.wouldyourather.us',
+    'ratherd.com',
+    'www.ratherd.com'
 )
 
 
