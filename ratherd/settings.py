@@ -158,11 +158,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = 'http://api.ratherd.com/static/'
+STATIC_URL = 'http://api.wouldyourather.us/static/'
 # STATICFILES_DIRS = (
 #     os.path.join(BASE_DIR, 'globals', 'static'),
 # )
-STATIC_ROOT = '/home/itsmoops/webapps/ratherd_static'
+STATIC_ROOT = '/home/itsmoops/webapps/wouldyourather_static'
 
 try:
     from local_settings import *
