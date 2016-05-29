@@ -34,6 +34,9 @@ ALLOWED_HOSTS = (
     'ratherd.com',
     'www.ratherd.com'
 )
+
+
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -43,8 +46,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rathers',
     'account',
+
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders'
@@ -125,8 +130,8 @@ SERVER_EMAIL = 'info@ratherd.us'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ratherd_db',
-        'USER': 'ratherdadmin',
+        'NAME': 'wouldyourather_db',
+        'USER': 'wyradmin',
         'PASSWORD': 'Esso11vicenza87',
         'HOST': '127.0.0.1',
         'PORT': '5432',
@@ -153,11 +158,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = 'http://api.ratherd.com/static/'
+STATIC_URL = 'http://api.wouldyourather.us/static/'
 # STATICFILES_DIRS = (
 #     os.path.join(BASE_DIR, 'globals', 'static'),
 # )
-STATIC_ROOT = '/home/itsmoops/webapps/ratherd_static'
+STATIC_ROOT = '/home/itsmoops/webapps/wouldyourather_static'
 
 try:
     from local_settings import *
