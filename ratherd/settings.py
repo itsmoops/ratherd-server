@@ -109,8 +109,8 @@ WSGI_APPLICATION = 'ratherd.wsgi.application'
 EMAIL_HOST = 'smtp.webfaction.com'
 EMAIL_HOST_USER = 'ratherd'
 EMAIL_HOST_PASSWORD = 'Esso11vicenza87'
-DEFAULT_FROM_EMAIL = 'info@ratherd.us'
-SERVER_EMAIL = 'info@ratherd.us'
+DEFAULT_FROM_EMAIL = 'info@ratherd.com'
+SERVER_EMAIL = 'info@ratherd.com'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
