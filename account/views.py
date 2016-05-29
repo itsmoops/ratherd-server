@@ -45,10 +45,10 @@ class UserViewSet(viewsets.ModelViewSet):
                 code.code = random_num
                 code.save()
 
-            link = "www.wouldyourather.us/verify?u=" + str(current.id)
-            body = "Hey " + current.username + ", we got a request to reset your Would You Rather password. Follow the link attached and use the reset code provided here: \n \n" + str(random_num) + "\n \n" + link
+            link = "www.ratherd.com/verify?u=" + str(current.id)
+            body = "Hey " + current.username + ", we got a request to reset your Rather'd password. Follow the link attached and use the reset code provided here: \n \n" + str(random_num) + "\n \n" + link
             email = current.email
-            send_mail('Would You Rather - Password Reset', body, 'info@wouldyourather.us', [email], fail_silently=False)
+            send_mail("Rather'd - Password Reset", body, "info@ratherd.com", [email], fail_silently=False)
 
             response = email
         else:
