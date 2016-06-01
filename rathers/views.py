@@ -58,7 +58,7 @@ class RatherViewSet(viewsets.ModelViewSet):
 	def ranked(self, request):
 		sort_type = request.query_params['sort']
 		if sort_type == "winner":
-			orders = [ '-wins', '-losses', '-ratio' ]
+			orders = [ '-ratio', '-wins', '-losses']
 			sortedValues = Rather.objects.order_by(*orders).filter(active=True).extra(where=["wins + losses > 10"])
 		elif sort_type == "loser":
 			orders = [ 'ratio', '-wins', '-losses']
