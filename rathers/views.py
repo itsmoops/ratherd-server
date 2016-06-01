@@ -56,7 +56,6 @@ class RatherViewSet(viewsets.ModelViewSet):
 
 	@list_route()
 	def ranked(self, request):
-		print request.query_params
 		sort_type = request.query_params['sort']
 		if sort_type == "winner":
 			orders = [ '-ratio', 'wins', 'losses']
