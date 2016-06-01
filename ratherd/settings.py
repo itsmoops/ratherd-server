@@ -85,7 +85,10 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',  # optional
-    )
+    ),
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
 }
 
 TEMPLATES = [
@@ -125,8 +128,8 @@ SERVER_EMAIL = 'info@ratherd.com'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ratherd_db',
-        'USER': 'ratherdadmin',
+        'NAME': 'wouldyourather_db',
+        'USER': 'wyradmin',
         'PASSWORD': 'Esso11vicenza87',
         'HOST': '127.0.0.1',
         'PORT': '5432',

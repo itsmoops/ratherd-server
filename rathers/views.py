@@ -1,15 +1,20 @@
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rathers.serializers import RatherSerializer
 from rathers.models import Rather
 from rathers.models import Sucks
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.permissions import AllowAny
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render_to_response
 from itertools import chain
+from django.db.models import Count
 
 # Create your views here.
+
 class RatherViewSet(viewsets.ModelViewSet):
 	queryset = Rather.objects.all()
 	permission_classes = [IsAuthenticatedOrReadOnly]
@@ -51,10 +56,38 @@ class RatherViewSet(viewsets.ModelViewSet):
 
 	@list_route()
 	def ranked(self, request):
-		count = Rather.objects.count()
-		top = Rather.objects.order_by('ratio').extra(where=["wins + losses > 10"])
-		serialized = self.serializer_class(top, context={'request': request}, many=True)
-		return Response(serialized.data, 200)
+		print request.query_params
+		sort_type = request.query_params['sort']
+		if sort_type == "winner":
+			orders = [ '-ratio', 'wins', 'losses']
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True).extra(where=["wins + losses > 10"])
+		elif sort_type == "loser":
+			orders = [ 'ratio', 'wins', 'losses']
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True).extra(where=["wins + losses > 10"])
+		elif sort_type == "contested":
+			orders = [ '-ratio', 'wins', 'losses']
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True,ratio__lte=.5).extra(where=["wins + losses > 10"])
+
+		paginator = Paginator(sortedValues, 10)
+		page_number = int(request.query_params['page'])
+		try:
+			page = paginator.page(page_number)
+		except PageNotAnInteger:
+			page = paginator.page(1)
+		except EmptyPage:
+			page = paginator.page(paginator.num_pages)
+
+		pagination_data = {
+			'has_prev': page.has_previous(),
+		    'has_next': page.has_next(),
+			'current_page': page_number,
+		    'total_pages': paginator.num_pages,
+			'prev_page': page_number - 1,
+		    'next_page': page_number + 1,
+			'total_count': paginator.count
+		}
+		serialized = self.serializer_class(page, context={'request': request}, many=True)
+		return Response({"rathers": serialized.data, "pagination": pagination_data}, 200)
 
 	@list_route()
 	def user_rathers(self, request):
