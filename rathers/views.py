@@ -90,9 +90,38 @@ class RatherViewSet(viewsets.ModelViewSet):
 
 	@list_route()
 	def user_rathers(self, request):
-		user_rathers = Rather.objects.filter(user_id=request.user.id)
-		serialized  = self.serializer_class(user_rathers, context={'request': request}, many=True)
-		return Response(serialized.data, 200)
+		sort_type = request.query_params['sort']
+		if sort_type == "winner":
+			orders = [ '-ratio', '-wins', '-losses']
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True,user_id=request.user.id).extra(where=["wins + losses > 10"])
+		elif sort_type == "loser":
+			orders = [ 'ratio', '-wins', '-losses']
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True,user_id=request.user.id).extra(where=["wins + losses > 10"])
+		elif sort_type == "contested":
+			orders = [ '-ratio', '-wins', '-losses']
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True,ratio__lte=.5,user_id=request.user.id).extra(where=["wins + losses > 10"])
+
+		paginator = Paginator(sortedValues, 10)
+		page_number = int(request.query_params['page'])
+		try:
+			page = paginator.page(page_number)
+		except PageNotAnInteger:
+			page = paginator.page(1)
+		except EmptyPage:
+			page = paginator.page(paginator.num_pages)
+
+		pagination_data = {
+			'has_prev': page.has_previous(),
+		    'has_next': page.has_next(),
+			'current_page': page_number,
+		    'total_pages': paginator.num_pages,
+			'prev_page': page_number - 1,
+		    'next_page': page_number + 1,
+			'total_count': paginator.count
+		}
+
+		serialized  = self.serializer_class(page, context={'request': request}, many=True)
+		return Response({"rathers": serialized.data, "pagination": pagination_data}, 200)
 
 	@detail_route(methods=['POST'], permission_classes=[AllowAny])
 	def vote(self, request, pk):
