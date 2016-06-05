@@ -47,7 +47,8 @@ INSTALLED_APPS = (
     'account',
     'rest_framework',
     'rest_framework.authtoken',
-    'corsheaders'
+    'corsheaders',
+    'social.apps.django_app.default'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -102,10 +103,27 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.i18n',
+                'django.core.context_processors.media',
+                'django.core.context_processors.static',
+                'django.core.context_processors.tz',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect'
             ],
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+   'social.backends.facebook.FacebookOAuth2',
+   'social.backends.google.GoogleOAuth2',
+   'social.backends.twitter.TwitterOAuth',
+   # 'django.contrib.auth.backends.ModelBackend',
+   'account.views.EmailOrUsernameModelBackend'
+)
+
+SOCIAL_AUTH_FACEBOOK_KEY = '1581753632138964'
+SOCIAL_AUTH_FACEBOOK_SECRET = '6da6410c8d12a363229814349bf9034a'
 
 WSGI_APPLICATION = 'ratherd.wsgi.application'
 
@@ -114,16 +132,6 @@ EMAIL_HOST_USER = 'ratherd'
 EMAIL_HOST_PASSWORD = 'Esso11vicenza87'
 DEFAULT_FROM_EMAIL = 'info@ratherd.com'
 SERVER_EMAIL = 'info@ratherd.com'
-
-# Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 
 DATABASES = {
     'default': {

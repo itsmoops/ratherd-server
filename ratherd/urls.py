@@ -27,7 +27,9 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-token-auth/', account.views.ObtainAuthToken.as_view()),
-    url(r'^login/$', django.contrib.auth.views.login)
+    url(r'^login/$', django.contrib.auth.views.login),
+    url(r'^login/', include('social.apps.django_app.urls', namespace='social')),
+    url('', include('django.contrib.auth.urls', namespace='auth')),
 ]
 
 router = DefaultRouter()

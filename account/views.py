@@ -14,6 +14,7 @@ from django.core.exceptions import ValidationError
 from django.core import serializers
 from django.core.mail import send_mail
 from random import randint
+from django.contrib.auth import get_user_model
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -96,3 +97,22 @@ class ObtainAuthToken(APIView):
         return Response({'token': token.key, 'user': UserSerializer(user).data})
 
     obtain_auth_token = ObtainAuthToken.as_view()
+
+class EmailOrUsernameModelBackend(object):
+    def authenticate(self, username=None, password=None):
+        if '@' in username:
+            kwargs = {'email': username}
+        else:
+            kwargs = {'username': username}
+        try:
+            user = get_user_model().objects.get(**kwargs)
+            if user.check_password(password):
+                return user
+        except User.DoesNotExist:
+            return None
+
+    def get_user(self, username):
+        try:
+            return get_user_model().objects.get(pk=username)
+        except get_user_model().DoesNotExist:
+            return None
