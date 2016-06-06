@@ -11,7 +11,9 @@ from rest_framework.permissions import AllowAny
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render_to_response
 from itertools import chain
+from operator import attrgetter
 from django.db.models import Count
+from django.db.models import Sum
 
 # Create your views here.
 
@@ -57,15 +59,29 @@ class RatherViewSet(viewsets.ModelViewSet):
 	@list_route()
 	def ranked(self, request):
 		sort_type = request.query_params['sort']
+		min_total = "20"
 		if sort_type == "winner":
 			orders = [ '-ratio', '-wins', '-losses']
-			sortedValues = Rather.objects.order_by(*orders).filter(active=True).extra(where=["wins + losses > 10"])
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True).extra(where=["wins + losses > " + min_total])
 		elif sort_type == "loser":
 			orders = [ 'ratio', '-wins', '-losses']
-			sortedValues = Rather.objects.order_by(*orders).filter(active=True).extra(where=["wins + losses > 10"])
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True).extra(where=["wins + losses > " + min_total])
 		elif sort_type == "contested":
-			orders = [ '-ratio', '-wins', '-losses']
-			sortedValues = Rather.objects.order_by(*orders).filter(active=True,ratio__lte=.5).extra(where=["wins + losses > 10"])
+			orders = [ '-ratio']
+			sortedValuesLess = Rather.objects.order_by('-ratio').filter(active=True,ratio__lte=.5)
+			sortedValuesGreater = Rather.objects.order_by('ratio').filter(active=True,ratio__lte=.5)
+			sortedValues = sorted(
+						    chain(sortedValuesLess, sortedValuesGreater),
+						    key=attrgetter('ratio'))
+		elif sort_type == "plays":
+			orders = [ '-total']
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True).extra(where=["wins + losses > " + min_total])
+		elif sort_type == "newest":
+			orders = [ '-date_submitted']
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True)
+		elif sort_type == "oldest":
+			orders = [ 'date_submitted']
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True)
 
 		paginator = Paginator(sortedValues, 10)
 		page_number = int(request.query_params['page'])
@@ -93,13 +109,13 @@ class RatherViewSet(viewsets.ModelViewSet):
 		sort_type = request.query_params['sort']
 		if sort_type == "winner":
 			orders = [ '-ratio', '-wins', '-losses']
-			sortedValues = Rather.objects.order_by(*orders).filter(active=True,user_id=request.user.id).extra(where=["wins + losses > 10"])
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True,user_id=request.user.id)
 		elif sort_type == "loser":
 			orders = [ 'ratio', '-wins', '-losses']
-			sortedValues = Rather.objects.order_by(*orders).filter(active=True,user_id=request.user.id).extra(where=["wins + losses > 10"])
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True,user_id=request.user.id)
 		elif sort_type == "contested":
 			orders = [ '-ratio', '-wins', '-losses']
-			sortedValues = Rather.objects.order_by(*orders).filter(active=True,ratio__lte=.5,user_id=request.user.id).extra(where=["wins + losses > 10"])
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True,ratio__lte=.5,user_id=request.user.id)
 
 		paginator = Paginator(sortedValues, 10)
 		page_number = int(request.query_params['page'])
