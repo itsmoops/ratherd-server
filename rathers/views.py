@@ -68,11 +68,7 @@ class RatherViewSet(viewsets.ModelViewSet):
 			sortedValues = Rather.objects.order_by(*orders).filter(active=True).extra(where=["wins + losses > " + min_total])
 		elif sort_type == "contested":
 			orders = [ '-ratio']
-			sortedValuesLess = Rather.objects.order_by('-ratio').filter(active=True,ratio__lte=.5)
-			sortedValuesGreater = Rather.objects.order_by('ratio').filter(active=True,ratio__lte=.5)
-			sortedValues = sorted(
-						    chain(sortedValuesLess, sortedValuesGreater),
-						    key=attrgetter('ratio'))
+			sortedValues = Rather.objects.order_by('-ratio').filter(active=True,ratio__lte=.5).extra(where=["wins + losses > " + min_total])
 		elif sort_type == "plays":
 			orders = [ '-total']
 			sortedValues = Rather.objects.order_by(*orders).filter(active=True).extra(where=["wins + losses > " + min_total])
