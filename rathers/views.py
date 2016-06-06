@@ -110,8 +110,17 @@ class RatherViewSet(viewsets.ModelViewSet):
 			orders = [ 'ratio', '-wins', '-losses']
 			sortedValues = Rather.objects.order_by(*orders).filter(active=True,user_id=request.user.id)
 		elif sort_type == "contested":
-			orders = [ '-ratio', '-wins', '-losses']
-			sortedValues = Rather.objects.order_by(*orders).filter(active=True,ratio__lte=.5,user_id=request.user.id)
+			orders = [ '-ratio']
+			sortedValues = Rather.objects.order_by('-ratio').filter(active=True,ratio__lte=.5,user_id=request.user.id)
+		elif sort_type == "plays":
+			orders = [ '-total']
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True,user_id=request.user.id)
+		elif sort_type == "newest":
+			orders = [ '-date_submitted']
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True,user_id=request.user.id)
+		elif sort_type == "oldest":
+			orders = [ 'date_submitted']
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True,user_id=request.user.id)
 
 		paginator = Paginator(sortedValues, 10)
 		page_number = int(request.query_params['page'])
