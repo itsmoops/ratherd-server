@@ -14,6 +14,12 @@ class UserSerializer(serializers.ModelSerializer):
         password = validated_data.get('password', User.objects.make_random_password())
         if not validated_data.get('email'):
             raise serializers.ValidationError('Invalid email')
+        if User.objects.filter(email=validated_data.get('email')).exists():
+            raise serializers.ValidationError({
+                'email': [
+                    'This email address is already in use.'
+                ]
+            })
         user = User.objects.create(
             email=validated_data['email'],
             username=validated_data['username'],
