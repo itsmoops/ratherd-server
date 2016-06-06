@@ -106,18 +106,18 @@ TEMPLATES = [
                 'django.core.context_processors.i18n',
                 'django.core.context_processors.media',
                 'django.core.context_processors.static',
-                'django.core.context_processors.tz',
-                'social.apps.django_app.context_processors.backends',
-                'social.apps.django_app.context_processors.login_redirect'
+                'django.core.context_processors.tz'
+                # 'social.apps.django_app.context_processors.backends',
+                # 'social.apps.django_app.context_processors.login_redirect'
             ],
         },
     },
 ]
 
 AUTHENTICATION_BACKENDS = (
-   'social.backends.facebook.FacebookOAuth2',
-   'social.backends.google.GoogleOAuth2',
-   'social.backends.twitter.TwitterOAuth',
+   # 'social.backends.facebook.FacebookOAuth2',
+   # 'social.backends.google.GoogleOAuth2',
+   # 'social.backends.twitter.TwitterOAuth',
    # 'django.contrib.auth.backends.ModelBackend',
    'account.views.EmailOrUsernameModelBackend'
 )
