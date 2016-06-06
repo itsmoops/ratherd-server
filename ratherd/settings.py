@@ -47,8 +47,8 @@ INSTALLED_APPS = (
     'account',
     'rest_framework',
     'rest_framework.authtoken',
-    'corsheaders',
-    'social.apps.django_app.default'
+    'corsheaders'
+    # 'social.apps.django_app.default'
 )
 
 MIDDLEWARE_CLASSES = (
