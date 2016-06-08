@@ -74,10 +74,10 @@ class RatherViewSet(viewsets.ModelViewSet):
 			sortedValues = Rather.objects.order_by(*orders).filter(active=True).extra(where=["wins + losses > " + min_total])
 		elif sort_type == "newest":
 			orders = [ '-date_submitted']
-			sortedValues = Rather.objects.order_by(*orders).filter(active=True)
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True).extra(where=["wins + losses > 0")
 		elif sort_type == "oldest":
 			orders = [ 'date_submitted']
-			sortedValues = Rather.objects.order_by(*orders).filter(active=True)
+			sortedValues = Rather.objects.order_by(*orders).filter(active=True).extra(where=["wins + losses > 0")
 
 		paginator = Paginator(sortedValues, 10)
 		page_number = int(request.query_params['page'])
